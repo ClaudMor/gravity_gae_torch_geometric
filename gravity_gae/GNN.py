@@ -71,7 +71,7 @@ class LinkPropertyPredictorGravity(Module):
 
         new_batch   = copy.copy(batch)
 
-        if batch.edge_label_index in ["salha_general", "salha_biased", "salha_bidirectional"]: 
+        if batch.edge_label_index in ["general", "biased", "bidirectional"]: 
             m_i = new_batch.x[:,-1].reshape(-1,1).expand((-1,new_batch.x.size(0))).t()
             r = new_batch.x[:,:-1]
 
@@ -114,7 +114,7 @@ class LinkPropertyPredictorSourceTarget(Module):
         hidden_dimension = batch.x.size(1)
         half_dimension = int(hidden_dimension/2)
 
-        if batch.edge_label_index in ["salha_general", "salha_biased", "salha_bidirectional"] and self.training:
+        if batch.edge_label_index in ["general", "biased", "bidirectional"] and self.training:
 
             source = batch.x[:, :half_dimension]
             target = batch.x[:, half_dimension:]

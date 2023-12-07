@@ -70,7 +70,7 @@ class VGAELossWrapper(Module):
 
     def forward(self, batch, ground_truth):
 
-        x_nan_idxs = torch.where(torch.isnan(batch.x) == 1)[0].tolist()
+        # x_nan_idxs = torch.where(torch.isnan(batch.x) == 1)[0].tolist()
 
         return  self.norm * self.loss(batch.x, ground_truth) + (0.5 / batch.x.size(0)) * kl_loss(batch.mu, batch.logstd)
 

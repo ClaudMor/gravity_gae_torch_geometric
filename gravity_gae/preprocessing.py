@@ -180,7 +180,7 @@ def mask_test_edges_biased_negative_samples(adj, test_percent=10.):
     test_edges_idx = edges_idx[:num_test]
     test_edges = edges_positive[test_edges_idx]
 
-    # In this setting, the reverse node pairs constitute negative samples
+    # In this task, the reverse node pairs constitute negative samples
     test_edges_false = np.fliplr(test_edges)
 
     # Get training incomplete adjacency matrix

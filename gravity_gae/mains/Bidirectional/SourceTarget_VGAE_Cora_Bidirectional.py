@@ -41,7 +41,7 @@ train_dense_adjm = torch.tensor((adj + sp.eye(adj.shape[0])).todense())
 edge_label_train_general = train_dense_adjm.reshape(-1)
 train_edge_index = torch.tensor(methods.sparse_to_tuple(adj + sp.eye(adj.shape[0]))[0], dtype = torch.int64).t()
 
-train_data = Data( x = features, edge_index = train_edge_index, edge_label = edge_label_train_general, edge_label_index = "salha_bidirectional")
+train_data = Data( x = features, edge_index = train_edge_index, edge_label = edge_label_train_general, edge_label_index = "bidirectional")
 
 test_data = Data( x = features, edge_index = torch.tensor(methods.sparse_to_tuple(adj + sp.eye(adj.shape[0]))[0], dtype = torch.int64).t(), edge_label_index = torch.cat((tt(test_edges), tt(test_edges_false.copy())), dim = 0).t(), edge_label = torch.cat((torch.ones(test_edges.shape[0]), torch.zeros(test_edges_false.shape[0]))))
 

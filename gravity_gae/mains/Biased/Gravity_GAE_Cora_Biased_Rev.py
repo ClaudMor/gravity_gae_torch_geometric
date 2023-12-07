@@ -39,7 +39,7 @@ train_dense_adjm = torch.tensor((adj + sp.eye(adj.shape[0])).todense())
 edge_label_train_general = train_dense_adjm.reshape(-1)
 train_edge_index = torch.tensor(methods.sparse_to_tuple(adj + sp.eye(adj.shape[0]))[0], dtype = torch.int64).t()
 
-train_data = Data( x = features, edge_index = train_edge_index, edge_label = edge_label_train_general, edge_label_index = "salha_biased")
+train_data = Data( x = features, edge_index = train_edge_index, edge_label = edge_label_train_general, edge_label_index = "biased")
 train_data.edge_label_index = torch.cat((train_data.edge_index, train_data.edge_index[[1,0],:]), dim = 1)
 num_pos_edges = train_data.edge_index.size(1)
 train_data.edge_label = torch.cat((torch.ones(num_pos_edges), torch.zeros(num_pos_edges)), dim = 0)
