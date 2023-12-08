@@ -16,11 +16,11 @@ os.chdir("..")
 
 # Please set the parameters below
 seed_everything(12345)             # Seed
-model_name = "sourcetarget_vgae"              # Please specify what model you'd liek to use. Must be one of {"gravity_gae", }
-dataset = "cora"     # Only "cora" is implemented right now
-task    = "bidirectional"     # One of "general", "biased", "bidirectional"
+model_name = "gravity_vgae"        # Please specify what model you'd liek to use. Must be one of {"gravity_gae", }
+dataset = "cora"                    # Only "cora" is implemented right now
+task    = "bidirectional"           # One of "general", "biased", "bidirectional"
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')      # One of `torch.device('cuda' if torch.cuda.is_available() else 'cpu')` or `torch.device("cpu")`
-num_runs = 1            # Number of initial configuration to average over
+num_runs = 5            # Number of initial configuration to average over
 lrscheduler = None
 lr                        = methods.setup_suggested_parameters_sets[dataset][task][model_name]["lr"]
 num_epochs                = methods.setup_suggested_parameters_sets[dataset][task][model_name]["num_epochs"]
@@ -72,7 +72,7 @@ if model_name == "gravity_gae"    or  model_name == "sourcetarget_gae" :
 elif (model_name == "gravity_vgae" or model_name == "sourcetarget_vgae") and task == "general" :
     train_loss = methods.VGAELossWrapper(norm,BCEWithLogitsLoss(pos_weight = pos_weight))
 elif (model_name == "gravity_vgae" or model_name == "sourcetarget_vgae") and (task == "biased" or task == "biased_rev" or task == "bidirectional" ):
-    train_loss = methods.VGAELossWrapper(1.,methods.recon_loss)
+    train_loss = methods.VGAELossWrapper(1/2, methods.recon_loss)
 
 
 
@@ -137,12 +137,12 @@ print(markdown_table)
 
 
 # gravity_vgae
-# |       | Gravity-VGAE     |
+# |       | gravity_vgae     |
 # |:------|:-----------------|
-# | AUC   | 0.826 +- 0.002   |
-# | F1    | 0.757 +- 0.001   |
-# | hitsk | 0.4488 +- 0.0008 |
-# | AP    | 0.8314 +- 0.0009 |
+# | AUC   | 0.825 +- 0.002   |
+# | F1    | 0.758 +- 0.002   |
+# | hitsk | 0.447 +- 0.003   |
+# | AP    | 0.8316 +- 0.0009 |
 
 # sourcetarget_gae
 # |       | SourceTarget-GAE   |
@@ -154,11 +154,11 @@ print(markdown_table)
 
 
 # sourcetarget_vgae
-# |       | SourceTarget-VGAE   |
+# |       | sourcetarget_vgae   |
 # |:------|:--------------------|
-# | AUC   | 0.633 +- 0.006      |
-# | F1    | 0.54 +- 0.02        |
-# | hitsk | 0.27 +- 0.01        |
+# | AUC   | 0.633 +- 0.005      |
+# | F1    | 0.54 +- 0.01        |
+# | hitsk | 0.26 +- 0.01        |
 # | AP    | 0.682 +- 0.009      |
 
 
@@ -174,12 +174,12 @@ print(markdown_table)
 
 
 # gravity_vgae
-# |       | Gravity-VGAE     |
+# |       | gravity_vgae     |
 # |:------|:-----------------|
 # | AUC   | 0.8359 +- 0.0009 |
-# | F1    | 0.771 +- 0.005   |
-# | hitsk | 0.442 +- 0.005   |
-# | AP    | 0.836 +- 0.001   |
+# | F1    | 0.771 +- 0.004   |
+# | hitsk | 0.438 +- 0.003   |
+# | AP    | 0.8368 +- 0.0009 |
 
 # sourcetarget_gae
 # |       | SourceTarget-GAE   |
@@ -192,10 +192,10 @@ print(markdown_table)
 # sourcetarget_vgae
 # |       | sourcetarget_vgae   |
 # |:------|:--------------------|
-# | AUC   | 0.9 +- 0.0          |
-# | F1    | 0.8 +- 0.0          |
-# | hitsk | 0.6 +- 0.0          |
-# | AP    | 0.9 +- 0.0          |
+# | AUC   | 0.895 +- 0.003      |
+# | F1    | 0.819 +- 0.007      |
+# | hitsk | 0.59 +- 0.01        |
+# | AP    | 0.884 +- 0.004      |
 
 
 
@@ -211,12 +211,12 @@ print(markdown_table)
 
 
 # gravity_vgae
-# |       | Gravity-VGAE   |
+# |       | gravity_vgae   |
 # |:------|:---------------|
 # | AUC   | 0.8 +- 0.01    |
-# | F1    | 0.75 +- 0.009  |
-# | hitsk | 0.61 +- 0.06   |
-# | AP    | 0.77 +- 0.01   |
+# | F1    | 0.75 +- 0.01   |
+# | hitsk | 0.63 +- 0.05   |
+# | AP    | 0.774 +- 0.008 |
 
 # sourcetarget_gae
 # |       | SourceTarget-GAE   |
@@ -227,9 +227,9 @@ print(markdown_table)
 # | AP    | 0.76 +- 0.03       |
 
 # sourcetarget_vgae
-# |       | Gravity-VGAE   |
-# |:------|:---------------|
-# | AUC   | 0.817 +- 0.009 |
-# | F1    | 0.744 +- 0.007 |
-# | hitsk | 0.7 +- 0.03    |
-# | AP    | 0.8 +- 0.02    |
+# |       | sourcetarget_vgae   |
+# |:------|:--------------------|
+# | AUC   | 0.819 +- 0.007      |
+# | F1    | 0.74 +- 0.01        |
+# | hitsk | 0.71 +- 0.02        |
+# | AP    | 0.81 +- 0.02        |
