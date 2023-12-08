@@ -156,6 +156,43 @@ models_suggested_parameters_sets = {"cora":{
                                             "biased":{
                                                     "gravity_gae": {"input_dimension":2708 , "hidden_dimension": 64, "output_dimension":32, "use_sparse_representation": True, "CLAMP" :2, "l": 0.001 , "train_l":False},
 
+                                                    "gravity_vgae": {"input_dimension":2708 , "hidden_dimension": 64, "output_dimension":32, "use_sparse_representation": True, "CLAMP" :4, "l": 0.05 , "train_l":False},
+
+                                                    "sourcetarget_gae": {"input_dimension":2708 , "hidden_dimension": 64, "output_dimension":32, "use_sparse_representation": True},
+
+                                                    "sourcetarget_vgae": {"input_dimension":2708 , "hidden_dimension": 64, "output_dimension":32, "use_sparse_representation": True},
+
+
+                                                    
+
+                                                    },
+
+                                            "biased_rev":{
+                                                    "gravity_gae": {"input_dimension":2708 , "hidden_dimension": 64, "output_dimension":32, "use_sparse_representation": True, "CLAMP" :2, "l": 0.001 , "train_l":False},
+
+                                                    "gravity_vgae": {"input_dimension":2708 , "hidden_dimension": 64, "output_dimension":32, "use_sparse_representation": True, "CLAMP" :4, "l": 0.05 , "train_l":False},
+
+
+                                                    "sourcetarget_gae": {"input_dimension":2708 , "hidden_dimension": 64, "output_dimension":32, "use_sparse_representation": True},
+
+
+                                                    "sourcetarget_vgae": {"input_dimension":2708 , "hidden_dimension": 64, "output_dimension":32, "use_sparse_representation": True},
+
+
+                                                    },
+
+
+                                                "bidirectional":{
+                                                    "gravity_gae": {"input_dimension":2708 , "hidden_dimension": 64, "output_dimension":32, "use_sparse_representation": True, "CLAMP" :2, "l": 1. , "train_l":False},
+
+                                                    "gravity_vgae": {"input_dimension":2708 , "hidden_dimension": 64, "output_dimension":32, "use_sparse_representation": True, "CLAMP" :4, "l": 1. , "train_l":True},
+
+
+                                                    "sourcetarget_gae": {"input_dimension":2708 , "hidden_dimension": 64, "output_dimension":32, "use_sparse_representation": True},
+
+
+                                                    "sourcetarget_vgae": {"input_dimension":2708 , "hidden_dimension": 64, "output_dimension":32, "use_sparse_representation": True},
+
 
                                                     }
                                             }
@@ -176,6 +213,40 @@ setup_suggested_parameters_sets = {"cora":{
 
                                         "biased":{
                                                     "gravity_gae": {"num_epochs":200, "lr":0.1, "early_stopping":False, "val_loss_fn":  None  },
+
+                                                    "gravity_vgae": {"num_epochs":200, "lr":0.005, "early_stopping":False, "val_loss_fn":  None  },
+
+                                                    "sourcetarget_gae": {"num_epochs":250, "lr":0.1, "early_stopping":False, "val_loss_fn":  None  },
+
+
+                                                    "sourcetarget_vgae": {"num_epochs":200, "lr":0.005, "early_stopping":False, "val_loss_fn":  None  },
+
+                                                    
+
+
+                                                },
+
+                                        "biased_rev":{
+                                                    "gravity_gae": {"num_epochs":200, "lr":0.1, "early_stopping":False, "val_loss_fn":  None  },
+
+                                                    "gravity_vgae": {"num_epochs":200, "lr":0.01, "early_stopping":False, "val_loss_fn":  None  },
+
+                                                    "sourcetarget_gae": {"num_epochs":200, "lr":0.1, "early_stopping":False, "val_loss_fn":  None  },
+
+                                                    "sourcetarget_vgae": {"num_epochs":200, "lr":0.005, "early_stopping":False, "val_loss_fn":  None  },
+
+
+                                                },
+
+
+                                        "bidirectional":{
+                                                    "gravity_gae": {"num_epochs":200, "lr":0.1, "early_stopping":False, "val_loss_fn":  None  },
+
+                                                    "gravity_vgae": {"num_epochs":200, "lr":0.05, "early_stopping":False, "val_loss_fn":  None  },
+
+                                                    "sourcetarget_gae": {"num_epochs":200, "lr":0.1, "early_stopping":False, "val_loss_fn":  None  },
+
+                                                    "sourcetarget_vgae": {"num_epochs":200, "lr":0.05, "early_stopping":False, "val_loss_fn":  None  },
 
 
                                                 }

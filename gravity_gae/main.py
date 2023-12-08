@@ -16,9 +16,9 @@ os.chdir("..")
 
 # Please set the parameters below
 seed_everything(12345)             # Seed
-model_name = "gravity_gae"              # Please specify what model you'd liek to use. Must be one of {"gravity_gae", }
+model_name = "sourcetarget_vgae"              # Please specify what model you'd liek to use. Must be one of {"gravity_gae", }
 dataset = "cora"     # Only "cora" is implemented right now
-task    = "biased"     # One of "general", "biased", "bidirectional"
+task    = "bidirectional"     # One of "general", "biased", "bidirectional"
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')      # One of `torch.device('cuda' if torch.cuda.is_available() else 'cpu')` or `torch.device("cpu")`
 num_runs = 1            # Number of initial configuration to average over
 lrscheduler = None
@@ -32,22 +32,25 @@ use_sparse_representation = methods.models_suggested_parameters_sets[dataset][ta
 
 model = None
 if model_name == "gravity_gae":
-    model = methods.get_gravity_gae(**methods.models_suggested_parameters_sets[dataset][task][model_name])
+    model = methods.get_gravity_gae(**methods.models_suggested_parameters_sets[dataset][task][model_name]).to(device)
 elif model_name == "gravity_vgae":
-    model = methods.get_gravity_vgae(**methods.models_suggested_parameters_sets[dataset][task][model_name])
+    model = methods.get_gravity_vgae(**methods.models_suggested_parameters_sets[dataset][task][model_name]).to(device)
 elif model_name == "sourcetarget_gae":
-    model = methods.get_sourcetarget_gae(**methods.models_suggested_parameters_sets[dataset][task][model_name])
+    model = methods.get_sourcetarget_gae(**methods.models_suggested_parameters_sets[dataset][task][model_name]).to(device)
 elif model_name == "sourcetarget_vgae":
-    model = methods.get_sourcetarget_vgae(**methods.models_suggested_parameters_sets[dataset][task][model_name])
+    model = methods.get_sourcetarget_vgae(**methods.models_suggested_parameters_sets[dataset][task][model_name]).to(device)
 
 
 
 train_data, val_data, test_data = None, None, None
 if dataset == "cora":
     if task == "general":
-        train_data, val_data, test_data = methods.load_cora(**methods.data_suggested_parameters_sets[dataset][task], device = device)
-    elif task == "biased":
+        train_data, val_data, test_data = methods.load_cora_general(**methods.data_suggested_parameters_sets[dataset][task], device = device)
+    elif task == "biased" or task == "biased_rev":
         train_data, val_data, test_data = methods.load_cora_biased(**methods.data_suggested_parameters_sets[dataset][task], device = device)
+    elif task == "bidirectional":
+        train_data, val_data, test_data = methods.load_cora_bidirectional(**methods.data_suggested_parameters_sets[dataset][task], device = device)
+
 
 
 optimizer = torch.optim.Adam(model.parameters(), lr = lr) 
@@ -66,8 +69,11 @@ norm = tot_train_edges / (2 * tot_neg_edges_train)
 train_loss = None
 if model_name == "gravity_gae"    or  model_name == "sourcetarget_gae" :
     train_loss = methods.StandardLossWrapper(norm,BCEWithLogitsLoss(pos_weight = pos_weight))
-elif model_name == "gravity_vgae" or model_name == "sourcetarget_vgae" :
+elif (model_name == "gravity_vgae" or model_name == "sourcetarget_vgae") and task == "general" :
     train_loss = methods.VGAELossWrapper(norm,BCEWithLogitsLoss(pos_weight = pos_weight))
+elif (model_name == "gravity_vgae" or model_name == "sourcetarget_vgae") and (task == "biased" or task == "biased_rev" or task == "bidirectional" ):
+    train_loss = methods.VGAELossWrapper(1.,methods.recon_loss)
+
 
 
 for i in range(num_runs):
@@ -121,9 +127,109 @@ print(markdown_table)
 
 ## cora, biased
 
+# gravity_gae
 # |       | Gravity-GAE    |
 # |:------|:---------------|
 # | AUC   | 0.82 +- 0.004  |
 # | F1    | 0.725 +- 0.005 |
 # | hitsk | 0.45 +- 0.01   |
 # | AP    | 0.826 +- 0.002 |
+
+
+# gravity_vgae
+# |       | Gravity-VGAE     |
+# |:------|:-----------------|
+# | AUC   | 0.826 +- 0.002   |
+# | F1    | 0.757 +- 0.001   |
+# | hitsk | 0.4488 +- 0.0008 |
+# | AP    | 0.8314 +- 0.0009 |
+
+# sourcetarget_gae
+# |       | SourceTarget-GAE   |
+# |:------|:-------------------|
+# | AUC   | 0.627 +- 0.006     |
+# | F1    | 0.36 +- 0.07       |
+# | hitsk | 0.2 +- 0.04        |
+# | AP    | 0.65 +- 0.02       |
+
+
+# sourcetarget_vgae
+# |       | SourceTarget-VGAE   |
+# |:------|:--------------------|
+# | AUC   | 0.633 +- 0.006      |
+# | F1    | 0.54 +- 0.02        |
+# | hitsk | 0.27 +- 0.01        |
+# | AP    | 0.682 +- 0.009      |
+
+
+## cora, biased rev
+
+# gravity_gae
+# |       | Gravity-GAE    |
+# |:------|:---------------|
+# | AUC   | 0.82 +- 0.004  |
+# | F1    | 0.725 +- 0.005 |
+# | hitsk | 0.45 +- 0.01   |
+# | AP    | 0.826 +- 0.002 |
+
+
+# gravity_vgae
+# |       | Gravity-VGAE     |
+# |:------|:-----------------|
+# | AUC   | 0.8359 +- 0.0009 |
+# | F1    | 0.771 +- 0.005   |
+# | hitsk | 0.442 +- 0.005   |
+# | AP    | 0.836 +- 0.001   |
+
+# sourcetarget_gae
+# |       | SourceTarget-GAE   |
+# |:------|:-------------------|
+# | AUC   | 0.894 +- 0.005     |
+# | F1    | 0.815 +- 0.009     |
+# | hitsk | 0.6 +- 0.01        |
+# | AP    | 0.885 +- 0.007     |
+
+# sourcetarget_vgae
+# |       | sourcetarget_vgae   |
+# |:------|:--------------------|
+# | AUC   | 0.9 +- 0.0          |
+# | F1    | 0.8 +- 0.0          |
+# | hitsk | 0.6 +- 0.0          |
+# | AP    | 0.9 +- 0.0          |
+
+
+
+## cora, bidirectional
+
+# gravity_gae
+# |       | Gravity-GAE    |
+# |:------|:---------------|
+# | AUC   | 0.792 +- 0.006 |
+# | F1    | 0.711 +- 0.007 |
+# | hitsk | 0.62 +- 0.02   |
+# | AP    | 0.798 +- 0.003 |
+
+
+# gravity_vgae
+# |       | Gravity-VGAE   |
+# |:------|:---------------|
+# | AUC   | 0.8 +- 0.01    |
+# | F1    | 0.75 +- 0.009  |
+# | hitsk | 0.61 +- 0.06   |
+# | AP    | 0.77 +- 0.01   |
+
+# sourcetarget_gae
+# |       | SourceTarget-GAE   |
+# |:------|:-------------------|
+# | AUC   | 0.77 +- 0.02       |
+# | F1    | 0.72 +- 0.01       |
+# | hitsk | 0.63 +- 0.07       |
+# | AP    | 0.76 +- 0.03       |
+
+# sourcetarget_vgae
+# |       | Gravity-VGAE   |
+# |:------|:---------------|
+# | AUC   | 0.817 +- 0.009 |
+# | F1    | 0.744 +- 0.007 |
+# | hitsk | 0.7 +- 0.03    |
+# | AP    | 0.8 +- 0.02    |
