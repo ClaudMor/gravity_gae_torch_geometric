@@ -16,9 +16,9 @@ os.chdir("..")
 
 # Please set the parameters below
 seed_everything(12345)             # Seed
-model_name = "gravity_vgae"        # Please specify what model you'd liek to use. Must be one of {"gravity_gae", }
+model_name = "gravity_vgae"        # Please specify what model you'd liek to use. Must be one of {"gravity_gae", "gravity_vgae", "sourcetarget_gae", "sourcetarget_vgae"}
 dataset = "cora"                    # Only "cora" is implemented right now
-task    = "bidirectional"           # One of "general", "biased", "bidirectional"
+task    = "bidirectional"           # One of {}"general", "biased", "bidirectional"}
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')      # One of `torch.device('cuda' if torch.cuda.is_available() else 'cpu')` or `torch.device("cpu")`
 num_runs = 5            # Number of initial configuration to average over
 lrscheduler = None
