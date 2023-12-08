@@ -16,17 +16,17 @@ os.chdir("..")
 
 # Please set the parameters below
 seed_everything(12345)             # Seed
-model_name = "gravity_vgae"        # Please specify what model you'd liek to use. Must be one of {"gravity_gae", "gravity_vgae", "sourcetarget_gae", "sourcetarget_vgae"}
+model_name = "gravity_vgae"        # Please specify what model you'd like to use. Must be one of {"gravity_gae", "gravity_vgae", "sourcetarget_gae", "sourcetarget_vgae"}
 dataset = "cora"                    # Only "cora" is implemented right now
-task    = "bidirectional"           # One of {}"general", "biased", "bidirectional"}
+task    = "bidirectional"           # One of {"general", "biased", "bidirectional"}
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')      # One of `torch.device('cuda' if torch.cuda.is_available() else 'cpu')` or `torch.device("cpu")`
-num_runs = 5            # Number of initial configuration to average over
+num_runs = 5                        # Number of initial configuration to average over
 lrscheduler = None
 lr                        = methods.setup_suggested_parameters_sets[dataset][task][model_name]["lr"]
 num_epochs                = methods.setup_suggested_parameters_sets[dataset][task][model_name]["num_epochs"]
-val_loss_fn               = methods.setup_suggested_parameters_sets[dataset][task][model_name]["val_loss_fn"]
-early_stopping            = methods.setup_suggested_parameters_sets[dataset][task][model_name]["early_stopping"]
-use_sparse_representation = methods.models_suggested_parameters_sets[dataset][task][model_name]["use_sparse_representation"]
+val_loss_fn               = methods.setup_suggested_parameters_sets[dataset][task][model_name]["val_loss_fn"]                      # The validation loss for early stopping. Default is the sum of AUC and AP over the validation set.
+early_stopping            = methods.setup_suggested_parameters_sets[dataset][task][model_name]["early_stopping"]                   # True or False
+use_sparse_representation = methods.models_suggested_parameters_sets[dataset][task][model_name]["use_sparse_representation"]        # True or False
 ####
 
 
