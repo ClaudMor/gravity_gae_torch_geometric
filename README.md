@@ -2,7 +2,9 @@
 
 This repository contains a Pytorch Geometric implementation of the [Gravity-Inspired Graph Autoencoders for Directed Link Prediction](https://doi.org/10.1145/3357384.3358023) paper.
 
-With resepect to the [original implementation](https://github.com/deezer/gravity_graph_autoencoders), it has the following limitations:
+This implementation has been referenced in the [original implementation](https://github.com/deezer/gravity_graph_autoencoders), and it has been reviewed by one of its authors.
+
+With respect to the original implementation, it has the following limitations:
 
 - Only the Cora dataset has currently been tested (but support for the other datasets should be already there);
 - Only the Gravity-GAE, Gravity-VGAE, SourceTarget-GAE and SourceTarget-VGAE are implemented.
